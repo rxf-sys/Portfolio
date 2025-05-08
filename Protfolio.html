@@ -407,20 +407,18 @@
             <div class="contact-form">
                 <form action="#" method="POST" id="contact-form">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Name" required>
+                        <input type="text" name="name" class="form-control" placeholder="Name" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" placeholder="E-Mail" required>
+                        <input type="email" name="email" class="form-control" placeholder="E-Mail" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Betreff">
+                        <input type="text" name="subject" class="form-control" placeholder="Betreff">
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" placeholder="Nachricht" required></textarea>
+                        <textarea name="message" class="form-control" placeholder="Nachricht" required></textarea>
                     </div>
-                    <button type="submit" class="btn"
-                            style="background: linear-gradient(135deg, var(--primary), var(--accent));">Nachricht senden
-                    </button>
+                    <button type="submit" class="btn" style="background: linear-gradient(135deg, var(--primary), var(--accent));">Nachricht senden</button>
                 </form>
             </div>
         </div>
@@ -465,6 +463,8 @@
     </div>
 </footer>
 
+<!-- EmailJS Script -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <!-- JavaScripts -->
 <script src="js/portfolio.js"></script>
 </body>

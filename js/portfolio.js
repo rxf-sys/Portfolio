@@ -219,40 +219,83 @@
             }
         }
         
-        // Handle contact form submission (example)
-        const contactForm = document.getElementById('contact-form');
-        
-        if (contactForm) {
-            contactForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Here you would typically add your form submission logic
-                // For now, just show a success message
-                const formElements = this.elements;
-                const submitBtn = this.querySelector('button[type="submit"]');
-                
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Wird gesendet...';
-                
-                setTimeout(() => {
-                    // Simulate a successful form submission
-                    for (let i = 0; i < formElements.length; i++) {
-                        if (formElements[i].type !== 'submit') {
-                            formElements[i].value = '';
-                        }
-                    }
-                    
-                    submitBtn.textContent = 'Gesendet!';
-                    submitBtn.style.background = 'var(--accent)';
-                    
-                    setTimeout(() => {
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = 'Nachricht senden';
-                        submitBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--accent))';
-                    }, 3000);
-                }, 1500);
-            });
-        }
+        // Initialisiere EmailJS
+                (function() {
+                    // EmailJS initialisieren mit deiner User ID
+                    // HINWEIS: Ersetze 'YOUR_USER_ID' durch deine tatsächliche User ID von EmailJS
+                    emailjs.init("T2m2PV4cSOEM6U2hm");
+                })();
+
+                // Handle contact form submission with EmailJS
+                const contactForm = document.getElementById('contact-form');
+
+                if (contactForm) {
+                    contactForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+
+                        const formElements = this.elements;
+                        const submitBtn = this.querySelector('button[type="submit"]');
+
+                        // Button-Status aktualisieren
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Wird gesendet...';
+
+                        // Sammle die Formulardaten
+                        const formData = {
+                            name: formElements.name ? formElements.name.value : '',
+                            email: formElements.email ? formElements.email.value : '',
+                            subject: formElements.subject ? formElements.subject.value : 'Kontaktanfrage von Portfolio',
+                            message: formElements.message ? formElements.message.value : ''
+                        };
+
+                        // Parameter für EmailJS vorbereiten
+                        const templateParams = {
+                            from_name: formData.name,
+                            from_email: formData.email,
+                            subject: formData.subject,
+                            message: formData.message
+                        };
+
+                        // E-Mail senden mit EmailJS
+                        // HINWEIS: Ersetze 'YOUR_SERVICE_ID' und 'YOUR_TEMPLATE_ID' mit deinen IDs
+                        emailjs.send('service_drwo4xn', 'template_1lnhe5h', templateParams)
+                            .then(function(response) {
+                                console.log('SUCCESS!', response.status, response.text);
+
+                                // Formular zurücksetzen
+                                for (let i = 0; i < formElements.length; i++) {
+                                    if (formElements[i].type !== 'submit') {
+                                        formElements[i].value = '';
+                                    }
+                                }
+
+                                // Erfolgsanzeige
+                                submitBtn.textContent = 'Gesendet!';
+                                submitBtn.style.background = 'var(--accent)';
+
+                                // Button nach 3 Sekunden zurücksetzen
+                                setTimeout(() => {
+                                    submitBtn.disabled = false;
+                                    submitBtn.textContent = 'Nachricht senden';
+                                    submitBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--accent))';
+                                }, 3000);
+                            })
+                            .catch(function(error) {
+                                console.log('FAILED...', error);
+
+                                // Fehleranzeige
+                                submitBtn.textContent = 'Fehler beim Senden!';
+                                submitBtn.style.background = '#e74c3c'; // Rot als Fehlerfarbe
+
+                                // Button nach 3 Sekunden zurücksetzen
+                                setTimeout(() => {
+                                    submitBtn.disabled = false;
+                                    submitBtn.textContent = 'Nachricht senden';
+                                    submitBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--accent))';
+                                }, 3000);
+                            });
+                    });
+                }
 
         // Update copyright year dynamically
         document.querySelector('.copyright p').textContent = `© ${new Date().getFullYear()} Robin Frank - Alle Rechte vorbehalten`;
